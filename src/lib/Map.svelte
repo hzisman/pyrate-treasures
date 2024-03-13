@@ -71,9 +71,9 @@
 	}
 </script>
 
-<div class="flex justify-center items-center h-full">
+<div style="--cell-size: {80}px" class="flex justify-center items-center h-full">
 	<div class="relative border-[40px] border-water-600 rounded-xl">
-		<div class="island">
+		<div class="island grid z-10 relative">
 			<div class="cell top-index-cell left-index-cell" />
 			{#each { length: cols } as _, i}
 				<div class="cell top-index-cell">{i}</div>
@@ -86,7 +86,7 @@
 				{#each row as _, j}
 					<div class="cell">
 						{#if isSelected(i, j)}
-							<div class="selected">
+							<div class="flex justify-center items-center h-full">
 								<img src="images/scribles/scrible{randInt(6)}.png" alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
 								<img src="images/tree.png" alt="tree" class="tree" />
 							</div>	
@@ -123,24 +123,10 @@
 <style lang="postcss">
 
 	:root {
-		--cell-size: 80px;
 		--deg: 10deg;
-
-	}
-
-	.island-container {
-		@apply flex justify-center items-center h-full;
-	}
-
-	.wrapper {
-        border: 50px solid var(--blue-1);
-        border-radius: 20px;
-
-		@apply relative;
 	}
 
 	.island {
-		@apply grid z-10 relative;
 		grid-template-rows: calc(var(--cell-size) / 2) repeat(4, var(--cell-size)) calc(var(--cell-size) / 2);
         grid-template-columns: calc(var(--cell-size) / 2) repeat(5, var(--cell-size)) calc(var(--cell-size) / 2);
 		/* grid-template-rows: repeat(10, minmax(0, 1fr));
@@ -148,18 +134,14 @@
 	}
 
 	.cell {
-		@apply text-center text-lg align-middle text-water-100 border-r-transparent border-solid border-0;
-		height: var(--cell-size);
-		width: var(--cell-size);
-		font-family: Monaco;
-		line-height: var(--cell-size);
+		/* height: var(--cell-size);
+		width: var(--cell-size); */
+		/* line-height: var(--cell-size); */
 		border-image: url(images/dotted_border.png) 30 round;
-	}
-
-	.cell:not([class*="index-cell"]) {
-		/* background-color: red; */
-		/* grid-column: span 2 / span 2;
-		grid-row: span 2 / span 2; */
+		@apply 
+			h-cellsize w-cellsize align-middle leading-cellsize
+			font-mono text-center text-water-100
+			border-r-transparent border-solid border-0;
 	}
 
 	.top-index-cell, .bottom-index-cell {
@@ -183,10 +165,6 @@
 		@apply bg-water-500;
     }
 
-	* {
-		box-sizing: border-box;
-	}
-
 	.display-island {
 		@apply grid grid-rows-5 grid-cols-6 absolute top-0 left-0;
 	}
@@ -195,11 +173,6 @@
 		height: var(--cell-size);
 		width: var(--cell-size);
 		background-size: cover;
-	}
-
-
-	.selected {
-		@apply flex justify-center items-center h-full;
 	}
 
 	.scrible {

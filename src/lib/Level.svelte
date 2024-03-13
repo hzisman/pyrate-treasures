@@ -14,35 +14,14 @@
 </script>
 
 
-<div class="level">
-    
-    <div id="code-area">
-        <CodeArea index={index} title={title} explanation={description} starterCode="arrray" />
+<div class="flex h-[100vh]">
+    <div class="h-full bg-water-50 ">
+        <CodeArea index={index} title={title} explanation={description} codePrefix="array" />
     </div>
     
     
-    <div id="island-area">
+    <div class="h-full w-1/2">
         <OceanBackground />
         <Map rows={rows} cols={cols} selected={selected} />
     </div>
 </div>
-
-
-<style>
-    .level {
-        display: flex;
-        flex-direction: row;
-        height: 100vh;
-    }
-    
-    #code-area {
-        width: 50%;
-        height: 100%;
-    }
-
-    #island-area {
-        width: 50%;
-        height: 100%;
-    }
-
-</style>
