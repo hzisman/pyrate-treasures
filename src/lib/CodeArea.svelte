@@ -1,4 +1,8 @@
 <script>
+    import { onMount } from 'svelte';
+    // import { getPyodideWithModules as loadPyodideWithModules } from '../utils/pyodide_utils';
+    import { getSelectedCells } from "../utils/matrix";
+    // import { loadPyodide } from "../utils/pyodide_source";
     export let index;
     export let title;
     export let explanation;
@@ -10,6 +14,8 @@
     let code = '';
     let wrong = false;
 
+    let pyodide;
+
     function submitCode(e) {
         if (e.key && e.key !== 'Enter') return;
 
@@ -17,12 +23,13 @@
         console.log(code)
         wrong = true;
 
-        // getSelectedCells(5, 4, code);
-
+        getSelectedCells(5, 4, code);
+        // loadPyodide()
         setTimeout(() => wrong = false, 1000);
     }
 
 </script>
+
 
 <div class="mx-16 mt-20 text-black-green">
     <h1 class="font-[GillSans] text-5xl">

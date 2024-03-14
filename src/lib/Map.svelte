@@ -71,6 +71,7 @@
 	}
 </script>
 
+
 <div style="--cell-size: {80}px" class="flex justify-center items-center h-full">
 	<div class="relative border-[40px] border-water-600 rounded-xl">
 		<div class="island grid z-10 relative">

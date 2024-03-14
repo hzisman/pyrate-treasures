@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@tsparticles/slim": "^3.3.0",
-    "@tsparticles/svelte": "^3.0.0"
+    "@tsparticles/svelte": "^3.0.0",
+    "node-fetch": "^3.3.2",
+    "pyodide": "^0.25.0"
   }
 }
