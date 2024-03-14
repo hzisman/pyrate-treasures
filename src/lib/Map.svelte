@@ -7,10 +7,12 @@
 
 	export let selected;
 
+	export let actualSelected = [];
+
 	// 0 means water
 	// 1 means ground
 	const map = getArray(rows).map((_, i) =>
-		getArray(cols).map((_, j) => isSelected(i, j) || Math.random() > 0.5)
+		getArray(cols).map((_, j) => isSelected(selected, i, j) || Math.random() > 0.5)
 	);
 
     const displayMap = createDisplayMap(map);
@@ -63,11 +65,12 @@
 
 	/**
 	 * Checks if the given location in the map contains a treasure
+	 * @param {number[]} list
 	 * @param {number} i
 	 * @param {number} j
 	 */
-	function isSelected(i, j) {
-		return selected.some(pair => pair[0] == i && pair[1] == j);
+	function isSelected(list, i, j) {
+		return list.includes(i * cols + j);
 	}
 </script>
 
@@ -85,12 +88,15 @@
 			{#each map as row, i}
             	<div class="cell left-index-cell">{i}</div>
 				{#each row as _, j}
-					<div class="cell">
-						{#if isSelected(i, j)}
+					<div class="cell relative">
+						{#if isSelected(selected, i, j)}
 							<div class="flex justify-center items-center h-full">
 								<img src="images/scribles/scrible{randInt(6)}.png" alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
 								<img src="images/tree.png" alt="tree" class="tree" />
 							</div>	
+						{/if}
+						{#if isSelected(actualSelected, i, j)}
+							<div  class="animate-scale-fade opacity-0 top-0 size-cellsize absolute bg-red-400 rounded-full"></div>
 						{/if}
 					</div>	
 				{/each}
@@ -196,4 +202,9 @@
         20% { transform: rotate(10deg) scale(1.5); }
         100% { transform: rotate(400deg) scale(0); }
     }
+
+	@keyframes scale-fade {
+		0% { transform: scale(0); }
+		100% { opacity: 0; }
+	}
 </style>

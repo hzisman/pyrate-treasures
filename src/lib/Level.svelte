@@ -11,17 +11,26 @@
     export let rows;
     export let cols;
     export let selected;
+
+    let actualSelected = [];
+
 </script>
 
 
 <div class="flex h-[100vh]">
     <div class="h-full bg-water-50 ">
-        <CodeArea index={index} title={title} explanation={description} codePrefix="array" />
+        <CodeArea 
+            index={index} 
+            title={title} 
+            explanation={description} 
+            codePrefix="array" 
+            setActualSelected={values => actualSelected = values}
+        />
     </div>
     
     
     <div class="h-full w-1/2">
         <OceanBackground />
-        <Map rows={rows} cols={cols} selected={selected} />
+        <Map rows={rows} cols={cols} selected={selected} actualSelected={actualSelected} />
     </div>
 </div>

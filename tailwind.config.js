@@ -28,10 +28,17 @@ export default {
                     '100%, from': { transform: 'translateX(0)' },
                     '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-10px)' },
                     '20%, 40%, 60%, 80%': { transform: 'translateX(10px)' },
+                },
+                'scale-fade': {
+                    '0%': { opacity: 1, transform: 'scale(0)' },
+                    // '1%': { opacity: 1, },
+                    '50%': { opacity: 0.8 },
+                    '100%': { opacity: 0 },
                 }
             },
             animation: {
                 shake: 'shake 1s both',
+                'scale-fade': 'scale-fade 1s',
             }
         }
     },

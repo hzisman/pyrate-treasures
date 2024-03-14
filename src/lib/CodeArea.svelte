@@ -1,8 +1,6 @@
 <script>
-    import { onMount } from 'svelte';
-    // import { getPyodideWithModules as loadPyodideWithModules } from '../utils/pyodide_utils';
     import { getSelectedCells } from "../utils/matrix";
-    // import { loadPyodide } from "../utils/pyodide_source";
+    
     export let index;
     export let title;
     export let explanation;
@@ -11,23 +9,32 @@
     export let codePrefix = '';
     export let starterCodeAfter = '';
 
+    export let setActualSelected;
+
     let code = '';
     let wrong = false;
+    let clicked = false;
 
-    let pyodide;
-
-    function submitCode(e) {
+    async function submitCode(e) {
         if (e.key && e.key !== 'Enter') return;
 
         e.preventDefault();
         console.log(code)
-        wrong = true;
+        wrong = clicked = true;
 
-        getSelectedCells(5, 4, code);
-        // loadPyodide()
         setTimeout(() => wrong = false, 1000);
-    }
+        setTimeout(() => clicked = false, 200);
 
+        const actualSelected = await getSelectedCells(4, 5, code);
+        const arrayToString = a => a.sort().join(', ');
+
+        if (arrayToString(actualSelected) == arrayToString(selected)) {
+        }
+
+        setActualSelected(actualSelected);
+        setTimeout(() => setActualSelected([]), 1500);
+        console.log(actualSelected);
+    }
 </script>
 
 
@@ -50,11 +57,22 @@
                 <div class="flex h-[24px] mx-6">
                     <span class="leading-[24px]">{codePrefix}</span>
                     <!-- svelte-ignore a11y-autofocus -->
-                    <textarea bind:value={code} autofocus autocapitalize="none" class="w-full resize-none outline-none"  on:keypress={submitCode}/>
+                    [
+                        <textarea 
+                            on:keypress={submitCode}
+                            bind:value={code} 
+                            autofocus 
+                            autocapitalize="off" 
+                            autocomplete="off" 
+                            autocorrect="off" 
+                            spellcheck="false" 
+                            class="resize-none outline-none" 
+                            style="width: max(10px, min({code.length * 10}px, 100%))"  
+                        />]
                 </div>
                 <pre>{starterCodeAfter}</pre>
             </div>
-            <button type="submit"  class="border-gray-500 border-x-2 border-t-2 border-b-[6px] rounded-sm px-5 text-gray-600 absolute bottom-3 right-5 focus:border-b-2">Enter</button>
+            <button type="submit" disabled={code === ''} class:!border-b-2={clicked}  class="border-gray-500 border-x-2 border-t-2 border-b-[6px] rounded-sm px-5 text-gray-600 absolute bottom-3 right-5 disabled:opacity-30">Enter</button>
         </div>
     </form>
 </div>
