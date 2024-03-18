@@ -1,38 +1,62 @@
 <script>
     import { getSelectedCells } from "../utils/matrix";
-    
-    export let index;
+    import { correctSelection, currentlySelectedCells, newWrongSelection } from './store'
+    import { navigate } from "svelte-routing";
+
+    export let level;
     export let title;
     export let explanation;
+
+    export let selected;
+
+    export let rows;
+    export let cols;
 
     export let starterCodeBefore = '';
     export let codePrefix = '';
     export let starterCodeAfter = '';
 
-    export let setActualSelected;
-
     let code = '';
-    let wrong = false;
-    let clicked = false;
+    let currentLevel = level;
 
+    $: {
+        if (currentLevel !== level) {
+            code = '';
+            currentLevel = level;
+        }
+    }
+
+    let clicked = false;
+    
+    const arrayToString = a => a.sort().join(', ');
+    
     async function submitCode(e) {
         if (e.key && e.key !== 'Enter') return;
-
         e.preventDefault();
-        console.log(code)
-        wrong = clicked = true;
+        if (code.length === 0) return;
+        if ($newWrongSelection) return;
 
-        setTimeout(() => wrong = false, 1000);
+        console.log(code)
+        clicked = true;
+        
+        const actualSelected = await getSelectedCells(rows, cols, code);
+        if (arrayToString(actualSelected) === arrayToString(selected)) {
+            correctSelection.set(true);
+            setTimeout(() => {
+                // @ts-ignore
+                document.startViewTransition(
+                    () => navigate(String(Number(level) + 1))
+                )
+                correctSelection.set(false);
+            }, 1000);
+        } else {
+            newWrongSelection.set(true);
+        }
+        
+        setTimeout(() => newWrongSelection.set(false), 1000);
         setTimeout(() => clicked = false, 200);
 
-        const actualSelected = await getSelectedCells(4, 5, code);
-        const arrayToString = a => a.sort().join(', ');
-
-        if (arrayToString(actualSelected) == arrayToString(selected)) {
-        }
-
-        setActualSelected(actualSelected);
-        setTimeout(() => setActualSelected([]), 1500);
+        currentlySelectedCells.set(actualSelected);
         console.log(actualSelected);
     }
 </script>
@@ -40,12 +64,12 @@
 
 <div class="mx-16 mt-20 text-black-green">
     <h1 class="font-[GillSans] text-5xl">
-        <span class="font-light mr-10">{index}.</span>
+        <span class="font-light mr-10">{level}.</span>
         <span class="font-semibold">{title}</span>
     </h1>
     <h2 class="mt-12">{explanation}</h2>
 
-    <form on:submit={submitCode} class:animate-shake={wrong}  class="mt-14" >
+    <form on:submit={submitCode} class:animate-shake={$newWrongSelection}   class="mt-14" >
         <div class="w-full flex bg-gray-200 font-mono relative">
             <div class="bg-gray-400 text-gray-200 py-5 px-2 flex flex-col text-right">
                 {#each {length: 8} as _, i}
@@ -68,7 +92,8 @@
                             spellcheck="false" 
                             class="resize-none outline-none" 
                             style="width: max(10px, min({code.length * 10}px, 100%))"  
-                        />]
+                        />
+                    ]
                 </div>
                 <pre>{starterCodeAfter}</pre>
             </div>

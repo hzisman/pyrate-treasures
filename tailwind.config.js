@@ -34,11 +34,22 @@ export default {
                     // '1%': { opacity: 1, },
                     '50%': { opacity: 0.8 },
                     '100%': { opacity: 0 },
-                }
+                },
+                'blow-out': {
+                    '0%': { transform: 'rotate(0deg) scale(1)' },
+                    '20%': { transform: 'rotate(10deg) scale(1.5)' },
+                    '100%': { transform: 'rotate(400deg) scale(0)' },
+                },
+                fade: {
+                    '0%': { opacity: 1 },
+                    '100%': { opacity: 0 },
+                },
             },
             animation: {
                 shake: 'shake 1s both',
                 'scale-fade': 'scale-fade 1s',
+                'blow-out': 'blow-out 1s',
+                'fade-out': 'fade 1s',
             }
         }
     },

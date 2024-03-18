@@ -3,6 +3,9 @@ import { loadPyodide } from 'pyodide'
 let pyodide;
 const loadedModules = [];
 
+/**
+ * @param {string[]} modules
+ */
 export async function loadPyodideWithModules(...modules) {
     pyodide ??= await loadPyodide({
         indexURL: './pyodide',

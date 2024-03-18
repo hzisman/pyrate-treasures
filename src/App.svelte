@@ -1,15 +1,13 @@
 <script>
+    import { Router, Route } from 'svelte-routing';
     import Level from "./lib/Level.svelte";
-
+    import { loadPyodideWithModules } from './utils/pyodide_utils';
 </script>
 
 <main>
-    <Level
-        index={1}
-        title="Single Element"
-        description="To choose an element use square brackets and then the row and the column seperated by comma."
-        rows={4}
-        cols={5}
-        selected={[4, 12]}
-    />
+    <Router>
+        <Route path="/:level" let:params>
+            <Level level={params.level} />
+        </Route>
+    </Router>
 </main>

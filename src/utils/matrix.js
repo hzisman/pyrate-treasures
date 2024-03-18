@@ -9,7 +9,7 @@ export function getArray(size, initValue=null) {
 }
 
 
-/** @param {number[][]} matrix */
+/** @param {any[][]} matrix */
 export function padMatrix(matrix, padding=0) {
     const cols = matrix[0].length;
     

@@ -1,25 +1,24 @@
 <script>
 	import { getArray, padMatrix } from '../utils/matrix';
 	import { rand, randInt } from '../utils/rand';
+	import { currentlySelectedCells, newWrongSelection, correctSelection } from './store';
 
 	export let rows;
 	export let cols;
 
 	export let selected;
 
-	export let actualSelected = [];
-
 	// 0 means water
 	// 1 means ground
-	const map = getArray(rows).map((_, i) =>
+	$: map = getArray(rows).map((_, i) =>
 		getArray(cols).map((_, j) => isSelected(selected, i, j) || Math.random() > 0.5)
 	);
 
-    const displayMap = createDisplayMap(map);
+    $: displayMap = createDisplayMap(map);
 
 	/**
 	 * Create a display map from a given map
-	 * @param {number[][]} map
+	 * @param {(number|boolean)[][]} map
 	 */
 	function createDisplayMap(map) {
 		/**
@@ -73,10 +72,9 @@
 		return list.includes(i * cols + j);
 	}
 </script>
-
-
-<div style="--cell-size: {80}px" class="flex justify-center items-center h-full">
-	<div class="relative border-[40px] border-water-600 rounded-xl">
+	
+<div style="--cell-size: {Math.round(400/cols)}px; --rows: {rows}; --cols: {cols};" class="flex justify-center items-center h-full">
+	<div class="map relative border-[40px] border-water-600 rounded-xl">
 		<div class="island grid z-10 relative">
 			<div class="cell top-index-cell left-index-cell" />
 			{#each { length: cols } as _, i}
@@ -91,11 +89,11 @@
 					<div class="cell relative">
 						{#if isSelected(selected, i, j)}
 							<div class="flex justify-center items-center h-full">
-								<img src="images/scribles/scrible{randInt(6)}.png" alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
-								<img src="images/tree.png" alt="tree" class="tree" />
+								<img src="images/scribles/scrible{randInt(6)}.png" class:!animate-fade-out={$correctSelection} alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
+								<img src="images/tree.png" alt="tree" class:!animate-blow-out={$correctSelection}  class="tree" />
 							</div>	
 						{/if}
-						{#if isSelected(actualSelected, i, j)}
+						{#if $newWrongSelection && isSelected($currentlySelectedCells, i, j)}
 							<div  class="animate-scale-fade opacity-0 top-0 size-cellsize absolute bg-red-400 rounded-full"></div>
 						{/if}
 					</div>	
@@ -133,17 +131,16 @@
 		--deg: 10deg;
 	}
 
+	.map {
+		view-transition-duration: 2000;
+		view-transition-name: move;
+	}
 	.island {
-		grid-template-rows: calc(var(--cell-size) / 2) repeat(4, var(--cell-size)) calc(var(--cell-size) / 2);
-        grid-template-columns: calc(var(--cell-size) / 2) repeat(5, var(--cell-size)) calc(var(--cell-size) / 2);
-		/* grid-template-rows: repeat(10, minmax(0, 1fr));
-		grid-template-columns: repeat(12, minmax(0, 1fr)); */
+		grid-template-rows: calc(var(--cell-size) / 2) repeat(var(--rows), var(--cell-size)) calc(var(--cell-size) / 2);
+        grid-template-columns: calc(var(--cell-size) / 2) repeat(var(--cols), var(--cell-size)) calc(var(--cell-size) / 2);
 	}
 
 	.cell {
-		/* height: var(--cell-size);
-		width: var(--cell-size); */
-		/* line-height: var(--cell-size); */
 		border-image: url(images/dotted_border.png) 30 round;
 		@apply 
 			h-cellsize w-cellsize align-middle leading-cellsize
@@ -173,7 +170,9 @@
     }
 
 	.display-island {
-		@apply grid grid-rows-5 grid-cols-6 absolute top-0 left-0;
+		grid-template-rows: repeat(calc(var(--rows) + 1), 1fr);
+		grid-template-columns: repeat(calc(var(--cols) + 1), 1fr);
+		@apply grid absolute top-0 left-0;
 	}
 
 	.display-cell {
@@ -197,14 +196,4 @@
         100% { transform: calc(-1 * rotate(var(--deg))); }
     }
 
-    @keyframes blow-out {
-        0% { transform: rotate(0deg) scale(1); }
-        20% { transform: rotate(10deg) scale(1.5); }
-        100% { transform: rotate(400deg) scale(0); }
-    }
-
-	@keyframes scale-fade {
-		0% { transform: scale(0); }
-		100% { opacity: 0; }
-	}
 </style>
