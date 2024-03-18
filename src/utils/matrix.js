@@ -9,6 +9,18 @@ export function getArray(size, initValue=null) {
 }
 
 
+
+/**
+ * @param {any[]} arr0
+ * @param {any[]} arr1
+ */
+export function containSameValues(arr0, arr1) {
+
+    const arrayToString = (/** @type {any[]} */ a) => a.sort().join(', ');
+    return arrayToString(arr0) === arrayToString(arr1);
+}
+
+
 /** @param {any[][]} matrix */
 export function padMatrix(matrix, padding=0) {
     const cols = matrix[0].length;

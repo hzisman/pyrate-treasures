@@ -16,15 +16,25 @@ const levels = {
         codePrefix: 'island',
     },
     3: {
-        title: 'Row of Elements',
+        title: 'Column of Elements',
+        explanation: 'To choose an element use square brackets and then',
+        rows: 6,
+        cols: 4,
+        selected: [8, 9, 10, 11],
+        codePrefix: 'island',
+    },
+    4: {
+        title: 'All Elements',
         explanation: 'To choose an element use square brackets and then',
         rows: 2,
-        cols: 3,
-        selected: [0],
+        cols: 2,
+        selected: [0, 1, 2, 3],
         codePrefix: 'island',
-    }
+    },
 }
 
 export function getLevelDetails(level) {
     return levels[level];
 }
+
+export const levelCount = Math.max(...Object.keys(levels).map(key => Number(key)))

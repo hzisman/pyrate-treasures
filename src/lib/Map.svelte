@@ -71,10 +71,20 @@
 	function isSelected(list, i, j) {
 		return list.includes(i * cols + j);
 	}
+		
+	const MID_BREAKPOINT = 768;
+	let innerWidth = window.innerWidth;
+	let innerHeight = window.innerHeight;
+	$: mapAreaHeight = innerWidth < MID_BREAKPOINT ? innerHeight / 2 : innerHeight;
+	$: mapAreaWidth = innerWidth < MID_BREAKPOINT ? innerWidth : innerWidth / 2;
+	$: cellSize = Math.floor(Math.min(mapAreaHeight * 0.7 / (rows + 1), mapAreaWidth * 0.7 / (cols + 1)));
+	console.log(mapAreaHeight, mapAreaWidth);
 </script>
-	
-<div style="--cell-size: {Math.round(400/cols)}px; --rows: {rows}; --cols: {cols};" class="flex justify-center items-center h-full">
-	<div class="map relative border-[40px] border-water-600 rounded-xl">
+
+<svelte:window bind:innerHeight bind:innerWidth />
+
+<div style="--cell-size: {cellSize}px; --rows: {rows}; --cols: {cols};" class="flex justify-center items-center h-full">
+	<div class="map relative border-water-600 rounded-xl" style="border-width: min(40px, 3vw)">
 		<div class="island grid z-10 relative">
 			<div class="cell top-index-cell left-index-cell" />
 			{#each { length: cols } as _, i}
@@ -131,10 +141,6 @@
 		--deg: 10deg;
 	}
 
-	.map {
-		view-transition-duration: 2000;
-		view-transition-name: move;
-	}
 	.island {
 		grid-template-rows: calc(var(--cell-size) / 2) repeat(var(--rows), var(--cell-size)) calc(var(--cell-size) / 2);
         grid-template-columns: calc(var(--cell-size) / 2) repeat(var(--cols), var(--cell-size)) calc(var(--cell-size) / 2);
@@ -196,4 +202,31 @@
         100% { transform: calc(-1 * rotate(var(--deg))); }
     }
 
+
+	.map {
+		view-transition-name: map-section;
+	}
+
+/* 
+	@keyframes transition-out {
+		100% {  opacity: 0; }
+	}
+
+	@keyframes transition-in {
+		0% { transform: translateY(-1000px); opacity: 0;}
+		10% { transform: translateY(-100px); }
+		30% { transform: translateY(50px); }
+		50% { transform: translateY(-25px); }
+		70% { transform: translateY(20px); }
+		90% { transform: translateY(-5px); }
+		100% { transform: translateY(0px); }
+	}
+
+	:root::view-transition-old(map-section) {
+		animation: 0.2s ease transition-out forwards;
+	}
+
+	:root::view-transition-new(map-section) {
+		animation: 1s ease transition-in forwards;
+	} */
 </style>

@@ -37,5 +37,6 @@
 </script>
 
 <Particles
-    style="height: 100%; position: absolute;" 
-    options="{particlesConfig}" />
+    class="absolute h-1/2 md:h-full" 
+    options="{particlesConfig}" 
+/>

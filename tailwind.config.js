@@ -46,10 +46,10 @@ export default {
                 },
             },
             animation: {
-                shake: 'shake 1s both',
-                'scale-fade': 'scale-fade 1s',
-                'blow-out': 'blow-out 1s',
-                'fade-out': 'fade 1s',
+                shake: 'shake 1s both forwards',
+                'scale-fade': 'scale-fade 1s forwards',
+                'blow-out': 'blow-out 1s forwards',
+                'fade-out': 'fade 1s forwards',
             }
         }
     },

@@ -1,7 +1,8 @@
 <script>
-    import { getSelectedCells } from "../utils/matrix";
-    import { correctSelection, currentlySelectedCells, newWrongSelection } from './store'
+    import { getSelectedCells, containSameValues } from "../utils/matrix";
+    import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from './store'
     import { navigate } from "svelte-routing";
+    import { levelCount } from '../levels';
 
     export let level;
     export let title;
@@ -16,19 +17,24 @@
     export let codePrefix = '';
     export let starterCodeAfter = '';
 
-    let code = '';
+    let code = $progress[level] ?? '';
     let currentLevel = level;
 
     $: {
         if (currentLevel !== level) {
-            code = '';
+            code = $progress[level] ?? '';
             currentLevel = level;
         }
     }
 
     let clicked = false;
     
-    const arrayToString = a => a.sort().join(', ');
+    function navigateToRelative(diff) {
+        // @ts-ignore
+        document.startViewTransition(
+            () => navigate(String(level + diff))
+        )
+    }
     
     async function submitCode(e) {
         if (e.key && e.key !== 'Enter') return;
@@ -40,20 +46,18 @@
         clicked = true;
         
         const actualSelected = await getSelectedCells(rows, cols, code);
-        if (arrayToString(actualSelected) === arrayToString(selected)) {
+        if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
+            progress.set({ ...progress, [level]: code });
             setTimeout(() => {
-                // @ts-ignore
-                document.startViewTransition(
-                    () => navigate(String(Number(level) + 1))
-                )
+                navigateToRelative(+1);
                 correctSelection.set(false);
-            }, 1000);
+            }, 2000);
         } else {
             newWrongSelection.set(true);
         }
         
-        setTimeout(() => newWrongSelection.set(false), 1000);
+        setTimeout(() => newWrongSelection.set(false), 2000);
         setTimeout(() => clicked = false, 200);
 
         currentlySelectedCells.set(actualSelected);
@@ -62,17 +66,23 @@
 </script>
 
 
-<div class="mx-16 mt-20 text-black-green">
-    <h1 class="font-[GillSans] text-5xl">
-        <span class="font-light mr-10">{level}.</span>
-        <span class="font-semibold">{title}</span>
-    </h1>
-    <h2 class="mt-12">{explanation}</h2>
+<div class="text-black-green mt-6 mx-8 md:mx-16 md:mt-10 ">
+    
+    <div class="justify-center font-mono flex md:justify-end mb-6">
+        <button on:click={() => navigateToRelative(-1)} disabled={level === 1} class="bg-gray-200 px-3 opacity-70 hover:opacity-100   disabled:opacity-20"><span class="arrow arrow-left border-r-gray-400" /></button>
+        <button class="bg-gray-200 px-4 mx-1 opacity-70 hover:opacity-100">
+            Level {level} of {levelCount}
+        </button>
+        <button on:click={() => navigateToRelative(+1)} disabled={level === levelCount} class="bg-gray-200 px-3 opacity-70 hover:opacity-100 disabled:opacity-20"><span class="arrow arrow-right border-l-gray-400 disabled:opacity-20" /></button>
+    </div>
 
-    <form on:submit={submitCode} class:animate-shake={$newWrongSelection}   class="mt-14" >
+    <h1 class="font-semibold font-[GillSans] text-3xl text-center md:text-left md:text-5xl">{title}</h1>
+    <h2 class="mt-6 md:mt-12">{explanation}</h2>
+
+    <form on:submit={submitCode} class:animate-shake={$newWrongSelection} class="mt-6 md:mt-14" >
         <div class="w-full flex bg-gray-200 font-mono relative">
             <div class="bg-gray-400 text-gray-200 py-5 px-2 flex flex-col text-right">
-                {#each {length: 8} as _, i}
+                {#each {length: 7} as _, i}
                     <div>{i+1}</div>
                 {/each}
             </div>
@@ -97,7 +107,35 @@
                 </div>
                 <pre>{starterCodeAfter}</pre>
             </div>
-            <button type="submit" disabled={code === ''} class:!border-b-2={clicked}  class="border-gray-500 border-x-2 border-t-2 border-b-[6px] rounded-sm px-5 text-gray-600 absolute bottom-3 right-5 disabled:opacity-30">Enter</button>
+            <button type="submit" disabled={code === ''} class:!border-b-2={clicked}  class="button right-5 ">Enter</button>
         </div>
     </form>
+
+        
+
 </div>
+
+<style lang="postcss">
+    .button {
+        @apply 
+        border-gray-500 border-x-2 border-t-2 border-b-[4px] 
+        rounded-sm px-5 
+        text-gray-600 
+        disabled:opacity-30
+        absolute bottom-3;
+    }
+
+    .arrow {
+        @apply inline-block h-0 w-0 border-y-transparent border-y-[6px] align-middle;
+    }
+    
+    .arrow-left {        
+        border-right-width: 13px;
+        border-right-style: solid;
+    }
+
+    .arrow-right {
+        border-left-width: 13px;
+        border-left-style: solid;
+    }
+</style>

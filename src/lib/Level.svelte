@@ -10,12 +10,12 @@
 </script>
 
 
-<div class="flex h-[100vh]">
-    <div class="h-full w-1/2 bg-water-50 ">
+<div class="h-[100vh] flex flex-col md:flex-row">
+    <div class="h-1/2 w-full bg-water-50 md:w-1/2 md:h-full">
         <CodeArea level={level} {...levelDetails} />
     </div>
     
-    <div class="h-full w-1/2" >
+    <div class="h-1/2 w-full md:w-1/2 md:h-full" >
         <OceanBackground />
         <Map {...levelDetails} />
     </div>
