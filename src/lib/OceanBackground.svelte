@@ -37,6 +37,6 @@
 </script>
 
 <Particles
-    class="absolute h-1/2 md:h-full" 
+    class="absolute h-1/2 md:h-full w-full" 
     options="{particlesConfig}" 
 />

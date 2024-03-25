@@ -17,6 +17,7 @@
     "vite": "^5.1.6"
   },
   "dependencies": {
+    "@tsparticles/confetti": "^3.3.0",
     "@tsparticles/slim": "^3.3.0",
     "@tsparticles/svelte": "^3.0.0",
     "node-fetch": "^3.3.2",

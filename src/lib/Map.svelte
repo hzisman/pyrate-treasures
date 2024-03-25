@@ -1,7 +1,14 @@
 <script>
+	import { fly, fade } from 'svelte/transition';
+	import { blowOut } from '../transition/blowOut'
+	import { fadeScale } from '../transition/fadeScale'
+
+	import Coin3D from './Coin3D.svelte';
+
 	import { getArray, padMatrix } from '../utils/matrix';
 	import { rand, randInt } from '../utils/rand';
 	import { currentlySelectedCells, newWrongSelection, correctSelection } from './store';
+    import { confetti } from '@tsparticles/confetti';
 
 	export let rows;
 	export let cols;
@@ -78,7 +85,20 @@
 	$: mapAreaHeight = innerWidth < MID_BREAKPOINT ? innerHeight / 2 : innerHeight;
 	$: mapAreaWidth = innerWidth < MID_BREAKPOINT ? innerWidth : innerWidth / 2;
 	$: cellSize = Math.floor(Math.min(mapAreaHeight * 0.7 / (rows + 1), mapAreaWidth * 0.7 / (cols + 1)));
-	console.log(mapAreaHeight, mapAreaWidth);
+
+	let correctBeforeNavigation = false;
+	$: if ($correctSelection) {
+		correctBeforeNavigation = true;
+		setTimeout(() => correctBeforeNavigation = false, 1000)
+	}
+	
+
+	// function renderConfetti(domElement) {
+	// 	const { x, y, height, width } = domElement.getBoundingClientRect();
+	// 	const position = {x: (x + width / 2) / window.innerWidth * 100, y: (y + height / 2) / window.innerHeight * 100};
+
+		
+	// }
 </script>
 
 <svelte:window bind:innerHeight bind:innerWidth />
@@ -99,8 +119,19 @@
 					<div class="cell relative">
 						{#if isSelected(selected, i, j)}
 							<div class="flex justify-center items-center h-full">
-								<img src="images/scribles/scrible{randInt(6)}.png" class:!animate-fade-out={$correctSelection} alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
-								<img src="images/tree.png" alt="tree" class:!animate-blow-out={$correctSelection}  class="tree" />
+								{#if $correctSelection}
+									<div class="absolute drop-shadow-xl" style="transform: scale({cellSize/2}%)">
+										<Coin3D  />
+									</div>
+								{/if}
+
+								{#if !$correctSelection}
+									<img src="images/scribles/scrible{randInt(6)}.png" out:fade={{duration: 2000}} alt="scrible" style="rotate: {rand(360)}deg" class="scrible" />
+									<div out:blowOut class="absolute">
+										<img src="images/tree.png" alt="tree" class="tree drop-shadow-md" />
+									</div>
+								{/if}
+
 							</div>	
 						{/if}
 						{#if $newWrongSelection && isSelected($currentlySelectedCells, i, j)}
@@ -139,6 +170,7 @@
 
 	:root {
 		--deg: 10deg;
+		--drop-shadow-lg: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 	}
 
 	.island {
@@ -192,7 +224,6 @@
 	}
 
 	.tree {
-		@apply absolute;
 		height: calc(var(--cell-size) / 1.8);
 		animation: swing ease-in-out 1s infinite alternate;
 	}
@@ -202,6 +233,18 @@
         100% { transform: calc(-1 * rotate(var(--deg))); }
     }
 
+	@keyframes coin-animation {
+		from {
+			/* transform: ; */
+		}
+		to {
+			filter: brightness(1.1) var(--drop-shadow-lg);
+		}
+	}
+
+	.coin-move {
+		animation: coin-animation 0.75s ease-in-out;
+	}
 
 	.map {
 		view-transition-name: map-section;
@@ -216,9 +259,9 @@
 		0% { transform: translateY(-1000px); opacity: 0;}
 		10% { transform: translateY(-100px); }
 		30% { transform: translateY(50px); }
-		50% { transform: translateY(-25px); }
+		50% { transform: translateY(-2.5px); }
 		70% { transform: translateY(20px); }
-		90% { transform: translateY(-5px); }
+		90% { transform: translateY(-.5px); }
 		100% { transform: translateY(0px); }
 	}
 

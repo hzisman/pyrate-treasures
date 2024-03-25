@@ -3,6 +3,8 @@
     import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from './store'
     import { navigate } from "svelte-routing";
     import { levelCount } from '../levels';
+    import { DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION } from '../config'
+    import { confetti } from "@tsparticles/confetti";
 
     export let level;
     export let title;
@@ -49,10 +51,8 @@
         if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
             progress.set({ ...progress, [level]: code });
-            setTimeout(() => {
-                navigateToRelative(+1);
-                correctSelection.set(false);
-            }, 2000);
+            setTimeout(() => navigateToRelative(+1), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
+            setTimeout(() => correctSelection.set(false), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION+100);
         } else {
             newWrongSelection.set(true);
         }
@@ -78,7 +78,6 @@
 
     <h1 class="font-semibold font-[GillSans] text-3xl text-center md:text-left md:text-5xl">{title}</h1>
     <h2 class="mt-6 md:mt-12">{explanation}</h2>
-
     <form on:submit={submitCode} class:animate-shake={$newWrongSelection} class="mt-6 md:mt-14" >
         <div class="w-full flex bg-gray-200 font-mono relative">
             <div class="bg-gray-400 text-gray-200 py-5 px-2 flex flex-col text-right">
