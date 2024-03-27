@@ -1,5 +1,5 @@
 <script>
-    import { rand } from "../utils/rand";
+    import { rand } from '../lib/rand';
     
     let className = '';
     export { className as class };
@@ -9,14 +9,7 @@
     const TOP_BOUNDRIES = [45, 60];
     const LEFT_BOUNDRIES = [5, 85];
 </script>
-<!-- <script>
 
-
-
-</script>
-
-<div class={className}>
-</div> -->
 
 <div class="{className} ">
     <img src="images/chest.png" alt="chest" class="drop-shadow-xl h-[20vh]"/>
@@ -26,4 +19,3 @@
 </div>
 
 <button on:click={() => coinCount += 1}>Add Coin</button>
-

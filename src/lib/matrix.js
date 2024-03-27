@@ -60,7 +60,9 @@ export async function getSelectedCells(rows, cols, selectionExpression) {
     `);
 
     let array;
-    if (result === Object(result)) { // If the result is an object
+    if (typeof result === 'string') { // Error scenario
+        return result;
+    } else if (result === Object(result)) { // If the result is an object
         array = Array.from(result.toJs()).map(
             v => ArrayBuffer.isView(v) ? Array.from(v) : v
         );

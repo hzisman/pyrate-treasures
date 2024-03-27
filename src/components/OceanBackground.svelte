@@ -4,6 +4,9 @@
 	import Particles, { particlesInit } from '@tsparticles/svelte';
 	import { loadSlim } from '@tsparticles/slim';
 
+    let className = '';
+    export { className as class };
+
 	let particlesConfig = {
         background: {
             image: "linear-gradient(#3C7073, #25787C)",
@@ -14,7 +17,11 @@
         },
         particles: {
             number: {
-                value: 2000
+                value: 3000,
+                density: {
+                    enable: true,
+                    area: 100,
+                }
             },
             move: {
                 enable: true,
@@ -37,6 +44,6 @@
 </script>
 
 <Particles
-    class="absolute h-1/2 md:h-full w-full" 
+    class={className}
     options="{particlesConfig}" 
 />

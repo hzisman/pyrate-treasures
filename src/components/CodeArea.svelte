@@ -1,10 +1,11 @@
 <script>
-    import { getSelectedCells, containSameValues } from "../utils/matrix";
-    import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from './store'
-    import { navigate } from "svelte-routing";
-    import { levelCount } from '../levels';
+    import { navigate } from 'svelte-routing';
+
+    import { getSelectedCells, containSameValues } from "../lib/matrix";
+    import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from '../lib/store'
+    import { levelCount } from '../lib/level';
     import { DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION } from '../config'
-    import { confetti } from "@tsparticles/confetti";
+    import { fade } from 'svelte/transition';
 
     export let level;
     export let title;
@@ -25,11 +26,15 @@
     $: {
         if (currentLevel !== level) {
             code = $progress[level] ?? '';
+            errorMessage = '';
             currentLevel = level;
         }
     }
 
     let clicked = false;
+    let errorMessage = '';
+
+    let textAreaInput;
     
     function navigateToRelative(diff) {
         // @ts-ignore
@@ -44,10 +49,21 @@
         if (code.length === 0) return;
         if ($newWrongSelection) return;
 
+        currentlySelectedCells.set([]);
+        errorMessage = '';
+
         console.log(code)
         clicked = true;
+        setTimeout(() => clicked = false, 200);
         
         const actualSelected = await getSelectedCells(rows, cols, code);
+        if (typeof actualSelected === 'string') {
+            errorMessage = actualSelected;
+            newWrongSelection.set(true);
+            setTimeout(() => newWrongSelection.set(false), 2000);
+            return;
+        }
+        
         if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
             progress.set({ ...progress, [level]: code });
@@ -58,7 +74,6 @@
         }
         
         setTimeout(() => newWrongSelection.set(false), 2000);
-        setTimeout(() => clicked = false, 200);
 
         currentlySelectedCells.set(actualSelected);
         console.log(actualSelected);
@@ -68,7 +83,7 @@
 
 <div class="text-black-green mt-6 mx-8 md:mx-16 md:mt-10 ">
     
-    <div class="justify-center font-mono flex md:justify-end mb-6">
+    <div class="justify-center font-code flex md:justify-end mb-6">
         <button on:click={() => navigateToRelative(-1)} disabled={level === 1} class="bg-gray-200 px-3 opacity-70 hover:opacity-100   disabled:opacity-20"><span class="arrow arrow-left border-r-gray-400" /></button>
         <button class="bg-gray-200 px-4 mx-1 opacity-70 hover:opacity-100">
             Level {level} of {levelCount}
@@ -77,15 +92,17 @@
     </div>
 
     <h1 class="font-semibold font-[GillSans] text-3xl text-center md:text-left md:text-5xl">{title}</h1>
-    <h2 class="mt-6 md:mt-12">{explanation}</h2>
-    <form on:submit={submitCode} class:animate-shake={$newWrongSelection} class="mt-6 md:mt-14" >
-        <div class="w-full flex bg-gray-200 font-mono relative">
+    <h2 class="mt-6 md:mt-12">{@html explanation}</h2>
+    <form on:submit={submitCode} class:!animate-shake={$newWrongSelection} class="mt-6 md:mt-14" >
+        <div class="w-full flex bg-gray-200 font-code relative">
             <div class="bg-gray-400 text-gray-200 py-5 px-2 flex flex-col text-right">
                 {#each {length: 7} as _, i}
                     <div>{i+1}</div>
                 {/each}
             </div>
-            <div class="w-full py-5">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div on:click={() => textAreaInput.focus()} class="w-full py-5">
                 <pre>{starterCodeBefore}</pre>
                 <div class="flex h-[24px] mx-6">
                     <span class="leading-[24px]">{codePrefix}</span>
@@ -93,7 +110,8 @@
                     [
                         <textarea 
                             on:keypress={submitCode}
-                            bind:value={code} 
+                            bind:value={code}
+                            bind:this={textAreaInput}
                             autofocus 
                             autocapitalize="off" 
                             autocomplete="off" 
@@ -110,8 +128,14 @@
         </div>
     </form>
 
-        
-
+    {#if errorMessage}
+        <div in:fade class="mt-2 bg-red-100 text-red-600 font-code px-2 transition-all">
+            &gt;
+            <span>
+                {errorMessage}
+            </span>
+        </div>
+    {/if}
 </div>
 
 <style lang="postcss">
@@ -122,19 +146,5 @@
         text-gray-600 
         disabled:opacity-30
         absolute bottom-3;
-    }
-
-    .arrow {
-        @apply inline-block h-0 w-0 border-y-transparent border-y-[6px] align-middle;
-    }
-    
-    .arrow-left {        
-        border-right-width: 13px;
-        border-right-style: solid;
-    }
-
-    .arrow-right {
-        border-left-width: 13px;
-        border-left-style: solid;
     }
 </style>

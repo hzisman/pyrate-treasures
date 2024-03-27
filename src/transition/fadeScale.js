@@ -6,7 +6,7 @@ export function fadeScale(node, { duration = 1000, startScale = 0, finalScale = 
         css: t => {
             return `
                 transform: scale(${diff*t + startScale});
-                opacity: ${t}
+                opacity: ${t * opacity}
             `;
         }
     };

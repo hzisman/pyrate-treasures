@@ -1,0 +1,12 @@
+title: Use the Step in the Slicing Expression
+explanation: >
+  Every trick that you know about regular list slicing in Python
+  will work the same in numpy array, you can use negative indexing,
+  and event change the step size to a number greater that one.
+
+rows: 10
+cols: 4
+
+selected: [2, 10, 18, 26, 34]
+
+codePrefix: 'island'

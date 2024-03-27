@@ -2,16 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes shake {
-    100%, from {
-        transform: translateX(0) 
-    }
 
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-10px)
-    }
+:root {
+    --deg: 10deg;
+}
 
-    20%, 40%, 60%, 80% {
-        transform: translateX(10px)
-    }
+code {
+    font-family: "PT Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-size: 0.9em;
+    background: #fafafa;
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+    font-weight: 300;
+}
+
+code:before, code:after { 
+    content: '`'; 
+}
+
+.arrow {
+    @apply inline-block h-0 w-0 border-y-transparent border-y-[6px] align-middle;
+}
+
+.arrow-left {        
+    border-right-width: 13px;
+    border-right-style: solid;
+}
+
+.arrow-right {
+    border-left-width: 13px;
+    border-left-style: solid;
+}
+
+    
+@keyframes swing {
+    0% { transform: rotate(var(--deg)); }
+    100% { transform: calc(-1 * rotate(var(--deg))); }
+}
+
+.animate-swing {
+    animation: swing ease-in-out 1s infinite alternate;
 }

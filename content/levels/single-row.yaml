@@ -1,0 +1,10 @@
+title: Select an entire row
+explanation: >
+  Because the row dimension is the first dimension of a matrix, you can select an entire
+  row by specifing its index.
+  For example the expression `matrix[2]` selects all the elements in the third row.
+
+rows: 6
+cols: 7
+selected: [28, 29, 30, 31, 32, 33, 34]
+codePrefix: 'island'

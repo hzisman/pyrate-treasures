@@ -9,6 +9,9 @@ export default {
             lineHeight: {
                 cellsize: 'var(--cell-size)',
             },
+            fontFamily: {
+                code: ['PT Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+            },
             colors: {
                 water: {
                     50: '#f9feff',
@@ -46,7 +49,7 @@ export default {
                 },
             },
             animation: {
-                shake: 'shake 1s both forwards',
+                shake: 'shake 1s forwards',
                 'scale-fade': 'scale-fade 1s forwards',
                 'blow-out': 'blow-out 1s forwards',
                 'fade-out': 'fade 1s forwards',

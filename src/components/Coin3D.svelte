@@ -2,10 +2,11 @@
     let className = '';
     export { className as class }
     export let style = '';
+    export let duration = 1;
 </script>
 
 <div class={className} style={style}>
-    <div class="coin-wrap">
+    <div class="coin-wrap" style="--duration: {duration}s">
         <div class="coin">
             <div class="coin__front-backface"></div>
             <div class="coin__back-backface"></div>
@@ -40,7 +41,7 @@
 
 .coin {
     transform-style: preserve-3d;
-    animation: coin 2s infinite linear;
+    animation: coin var(--duration) infinite linear;
     height: 100px;
     width: 100px;
 
@@ -114,7 +115,7 @@
 
 @keyframes coin {
     to {
-        transform: rotateY(calc(-359deg * 2));
+        transform: rotateY(calc(-359deg));
     }
 }
 
