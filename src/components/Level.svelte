@@ -1,16 +1,16 @@
 <script>
     import { fade } from 'svelte/transition'
 
-	import CodeArea from "./CodeArea.svelte";
-	import Map from "./Map.svelte";
-    import OceanBackground from "./OceanBackground.svelte";
-    import { getLevelDetails } from "../lib/level";
-    import { loadPyodideWithModules } from "../lib/pyodide_utils";
+	import CodeArea from './CodeArea.svelte';
+	import Map from './Map.svelte';
+    import OceanBackground from './OceanBackground.svelte';
+    import { getLevelDetails } from '../lib/level';
+    import { loadPyodideWithModules } from '../lib/pyodide_utils';
     import CompassLoading from './CompassLoading.svelte';
     import HomeLink from './HomeLink.svelte';
 
     export let level;
-    
+
     $: levelDetails = getLevelDetails(level);
 </script>
 

@@ -9,7 +9,7 @@
 
 	let particlesConfig = {
         background: {
-            image: "linear-gradient(#3C7073, #25787C)",
+            image: 'linear-gradient(#3C7073, #25787C)',
         },
         fullScreen: {
             enable: false,
@@ -45,5 +45,5 @@
 
 <Particles
     class={className}
-    options="{particlesConfig}" 
+    options={particlesConfig} 
 />

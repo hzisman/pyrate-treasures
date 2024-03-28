@@ -1,7 +1,7 @@
 <script>
-    import { Link } from "svelte-routing";
-    import Coin3D from "./Coin3D.svelte";
-    import OceanBackground from "./OceanBackground.svelte";
+    import { Link } from 'svelte-routing';
+    import Coin3D from './Coin3D.svelte';
+    import OceanBackground from './OceanBackground.svelte';
 
 </script>
 

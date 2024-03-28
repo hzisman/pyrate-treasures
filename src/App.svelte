@@ -1,7 +1,7 @@
 <script>
     import { Router, Route } from 'svelte-routing';
     import Home from './components/Home.svelte'
-    import Level from "./components/Level.svelte";
+    import Level from './components/Level.svelte';
 </script>
 
 <main>

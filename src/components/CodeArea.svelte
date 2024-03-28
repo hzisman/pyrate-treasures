@@ -1,7 +1,7 @@
 <script>
     import { navigate } from 'svelte-routing';
 
-    import { getSelectedCells, containSameValues } from "../lib/matrix";
+    import { getSelectedCells, containSameValues } from '../lib/matrix';
     import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from '../lib/store'
     import { levelCount } from '../lib/level';
     import { DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION } from '../config'
@@ -23,12 +23,10 @@
     let code = $progress[level] ?? '';
     let currentLevel = level;
 
-    $: {
-        if (currentLevel !== level) {
-            code = $progress[level] ?? '';
-            errorMessage = '';
-            currentLevel = level;
-        }
+    $: if (currentLevel !== level) {
+        code = $progress[level] ?? '';
+        errorMessage = '';
+        currentLevel = level;
     }
 
     let clicked = false;
