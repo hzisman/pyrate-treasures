@@ -1,11 +1,11 @@
 <script>
-    import { navigate } from 'svelte-routing';
+    import { fade } from 'svelte/transition';
 
+    import { relativeNavigation } from '../lib/navigation'
     import { getSelectedCells, containSameValues } from '../lib/matrix';
     import { correctSelection, currentlySelectedCells, newWrongSelection, progress } from '../lib/store'
     import { levelCount } from '../lib/level';
     import { DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION } from '../config'
-    import { fade } from 'svelte/transition';
 
     export let level;
     export let title;
@@ -20,6 +20,8 @@
     export let codePrefix = '';
     export let starterCodeAfter = '';
 
+    $: relative = relativeNavigation(level);
+
     let code = $progress[level] ?? '';
     let currentLevel = level;
 
@@ -33,13 +35,6 @@
     let errorMessage = '';
 
     let textAreaInput;
-    
-    function navigateToRelative(diff) {
-        // @ts-ignore
-        document.startViewTransition(
-            () => navigate(String(level + diff))
-        )
-    }
     
     async function submitCode(e) {
         if (e.key && e.key !== 'Enter') return;
@@ -63,7 +58,7 @@
         if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
             progress.update(oldProgress => ({ ...oldProgress, [level]: code }));
-            setTimeout(() => navigateToRelative(+1), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
+            setTimeout(relative.next, DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
             setTimeout(() => correctSelection.set(false), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION+100);
         } else {
             newWrongSelection.set(true);
@@ -78,13 +73,12 @@
 
 
 <div class="text-black-green mt-6 mx-8 md:mx-16 md:mt-10 ">
-    
     <div class="justify-center font-code flex md:justify-end mb-6">
-        <button on:click={() => navigateToRelative(-1)} disabled={level === 1} class="bg-gray-200 px-3 opacity-70 hover:opacity-100   disabled:opacity-20"><span class="arrow arrow-left border-r-gray-400" /></button>
+        <button on:click={relative.prev} disabled={level === 1} class="bg-gray-200 px-3 opacity-70 hover:opacity-100   disabled:opacity-20"><span class="arrow arrow-left border-r-gray-400" /></button>
         <button class="bg-gray-200 px-4 mx-1 opacity-70 hover:opacity-100">
             Level {level} of {levelCount}
         </button>
-        <button on:click={() => navigateToRelative(+1)} disabled={level === levelCount} class="bg-gray-200 px-3 opacity-70 hover:opacity-100 disabled:opacity-20"><span class="arrow arrow-right border-l-gray-400 disabled:opacity-20" /></button>
+        <button on:click={relative.next} disabled={level === levelCount} class="bg-gray-200 px-3 opacity-70 hover:opacity-100 disabled:opacity-20"><span class="arrow arrow-right border-l-gray-400 disabled:opacity-20" /></button>
     </div>
 
     <h1 class="font-semibold font-[GillSans] text-3xl text-center md:text-left md:text-5xl">{title}</h1>
@@ -120,7 +114,7 @@
                 </div>
                 <pre>{starterCodeAfter}</pre>
             </div>
-            <button type="submit" disabled={code === '' || $newWrongSelection} class:!border-b-2={clicked}  class="button right-5 ">Enter</button>
+            <button type="submit" disabled={code === '' || $newWrongSelection || $correctSelection} class:!border-b-2={clicked}  class="button right-5 ">Enter</button>
         </div>
     </form>
 
