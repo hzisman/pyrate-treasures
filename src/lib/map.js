@@ -56,7 +56,7 @@ export function createDisplayMap(map) {
  * @param {number} j
  */
 export function isSelected(list, cols, i, j) {
-    return list.includes(i * cols + j);
+    return list?.includes(i * cols + j);
 }
 
 
