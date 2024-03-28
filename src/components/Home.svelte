@@ -1,11 +1,11 @@
 <script>
     import { Link } from "svelte-routing";
-import Coin3D from "./Coin3D.svelte";
+    import Coin3D from "./Coin3D.svelte";
     import OceanBackground from "./OceanBackground.svelte";
 
 </script>
 
-<div class="h-[100vh]">
+<div class="h-[100vh] bg-[linear-gradient(#3C7073, #25787C)]">
     <div class="absolute z-10 h-full w-full flex justify-center items-center">
         <div>
             <img src="images/island.png" alt="island" class="h-[min(60vh,80vw)] white-glow mx-auto" />
@@ -18,7 +18,6 @@ import Coin3D from "./Coin3D.svelte";
                     <span class="arrow arrow-right border-l-water-500" />
                     <span class="arrow arrow-right border-l-water-600" />
                 </span>
-                
             </Link>
             <Coin3D duration={3} class="drop-shadow-lg flex justify-center"/>
         </div>

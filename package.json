@@ -7,11 +7,12 @@
     "build-content": "content/build-levels.js",
     "dev": "npm run build-content && vite",
     "build": "npm run build-content && vite build",
-    "preview": "npm run build-content && vite preview"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "autoprefixer": "^10.4.18",
+    "isomorphic-fetch": "^3.0.0",
     "marked": "^12.0.1",
     "postcss": "^8.4.35",
     "svelte": "^4.2.12",
@@ -20,7 +21,6 @@
     "yaml": "^2.4.1"
   },
   "dependencies": {
-    "@tsparticles/confetti": "^3.3.0",
     "@tsparticles/slim": "^3.3.0",
     "@tsparticles/svelte": "^3.0.0",
     "node-fetch": "^3.3.2",

@@ -1,13 +1,16 @@
+<script>
+    let className = '';
+    export { className as class };
+</script>
 
-<div class="absolute h-[100vh] w-[100vw] bg-white bg-opacity-85 flex justify-center items-center z-[1000]">
-    <div class="compass">
+<div class="{className} absolute h-[100vh] w-[100vw] bg-white bg-opacity-85 flex justify-center items-center z-[1000]">
+    <div class="compass scale-150">
         <div class="needle">
         </div>
     </div>
 </div>
 
 <style>
-
     .compass {
         border: 2px solid #888;
         display: block; 
@@ -44,11 +47,11 @@
     }
 
     @keyframes waggle {
-        0%   {transform:rotate(0deg);}
-        10%  {transform:rotate(12deg);}
-        40%  {transform:rotate(-25deg);}
-        60%  {transform:rotate(20deg);}
-        80%  {transform:rotate(-15deg);}
-        100% {transform:rotate(0deg);}
+        0%   { transform:rotate(0deg) ;}
+        10%  { transform:rotate(12deg) ;}
+        40%  { transform:rotate(-25deg) ;}
+        60%  { transform:rotate(20deg) ;}
+        80%  { transform:rotate(-15deg) ;}
+        100% { transform:rotate(0deg) ;}
     }
 </style>

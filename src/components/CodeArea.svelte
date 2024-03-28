@@ -51,29 +51,27 @@
 
         currentlySelectedCells.set([]);
         errorMessage = '';
-
-        console.log(code)
         clicked = true;
-        setTimeout(() => clicked = false, 200);
-        
+
         const actualSelected = await getSelectedCells(rows, cols, code);
+        
+        setTimeout(() => clicked = false, 100);
+        
         if (typeof actualSelected === 'string') {
             errorMessage = actualSelected;
-            newWrongSelection.set(true);
-            setTimeout(() => newWrongSelection.set(false), 2000);
             return;
         }
         
         if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
-            progress.set({ ...progress, [level]: code });
+            progress.update(oldProgress => ({ ...oldProgress, [level]: code }));
             setTimeout(() => navigateToRelative(+1), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
             setTimeout(() => correctSelection.set(false), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION+100);
         } else {
             newWrongSelection.set(true);
         }
         
-        setTimeout(() => newWrongSelection.set(false), 2000);
+        setTimeout(() => newWrongSelection.set(false), 1000);
 
         currentlySelectedCells.set(actualSelected);
         console.log(actualSelected);
@@ -124,7 +122,7 @@
                 </div>
                 <pre>{starterCodeAfter}</pre>
             </div>
-            <button type="submit" disabled={code === ''} class:!border-b-2={clicked}  class="button right-5 ">Enter</button>
+            <button type="submit" disabled={code === '' || $newWrongSelection} class:!border-b-2={clicked}  class="button right-5 ">Enter</button>
         </div>
     </form>
 
