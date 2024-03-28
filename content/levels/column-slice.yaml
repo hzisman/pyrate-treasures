@@ -1,0 +1,17 @@
+title: Use Slicing in Numpy Array
+explanation: >
+  Each dimension index can be not only number or tuple, but a slice expression similar
+  to how you use it in native python lists. 
+  The syntax is `start:end:step`'.
+  So if you want to choose only the first 3 element in the second row you can use the 
+  expression: `matrix[1, :3]`'.
+
+  Note: The `end` is not included in the selection.
+
+
+rows: 3
+cols: 7
+
+selected: [18, 19, 20]
+
+codePrefix: 'island'
