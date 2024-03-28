@@ -1,16 +1,14 @@
 <script>
-    import { Router, Route } from 'svelte-routing';
+    import Router from 'svelte-spa-router';
     import Home from './components/Home.svelte'
     import Level from './components/Level.svelte';
+
+    const routes = {
+        '/': Home,
+        '/:level': Level,
+    }
 </script>
 
 <main>
-    <Router>
-        <Route path="/">
-            <Home />
-        </Route>
-        <Route path="/:level" let:params>
-            <Level level={+params.level} />
-        </Route>
-    </Router>
+    <Router {routes} />
 </main>

@@ -20,6 +20,8 @@
     export let codePrefix = '';
     export let starterCodeAfter = '';
 
+    $: level, console.table({level, levelCount})
+
     $: relative = relativeNavigation(level);
 
     let code = $progress[level] ?? '';

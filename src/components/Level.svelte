@@ -9,9 +9,9 @@
     import CompassLoading from './CompassLoading.svelte';
     import HomeLink from './HomeLink.svelte';
 
-    export let level;
+    export let params =  {};
 
-    $: levelDetails = getLevelDetails(level);
+    $: levelDetails = getLevelDetails(params.level);
 </script>
 
 {#await loadPyodideWithModules('numpy')}
@@ -24,7 +24,7 @@
 <div class="h-[100vh] flex flex-col md:flex-row">
     <div class="h-1/2 w-full bg-water-50 overflow-auto pb-6 md:w-1/2 md:h-full">
         <HomeLink class="top-4 left-4" />
-        <CodeArea level={level} {...levelDetails} />
+        <CodeArea level={+params.level} {...levelDetails} />
     </div>
 
     <div class="h-1/2 w-full md:w-1/2 md:h-full bg-water-800" >

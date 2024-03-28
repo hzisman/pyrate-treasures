@@ -1,9 +1,10 @@
-import { navigate } from "svelte-routing"
+import { push } from 'svelte-spa-router'
 
 export function navigateWithViewTransition(to='/') {
+    console.log(to)
     // @ts-ignore
     document.startViewTransition(
-        () => navigate(to)
+        () => push(`#/${to}`)
     )
 }
 

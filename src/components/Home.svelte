@@ -1,5 +1,5 @@
 <script>
-    import { Link } from 'svelte-routing';
+    import { link } from 'svelte-spa-router';
     import Coin3D from './Coin3D.svelte';
     import OceanBackground from './OceanBackground.svelte';
 
@@ -9,7 +9,7 @@
     <div class="absolute z-10 h-full w-full flex justify-center items-center">
         <div>
             <img src="images/island.png" alt="island" class="h-[min(60vh,80vw)] white-glow mx-auto" />
-            <Link to="/1" class="flex justify-center">
+            <a use:link href="/1" class="flex justify-center">
                 <h1 class="text-center my-6 text-[50px] text-water-100 font-[GillSans] white-glow start">
                     Py-rate Treasures
                 </h1>
@@ -18,7 +18,7 @@
                     <span class="arrow arrow-right border-l-water-500" />
                     <span class="arrow arrow-right border-l-water-600" />
                 </span>
-            </Link>
+            </a>
             <Coin3D duration={3} class="drop-shadow-lg flex justify-center"/>
         </div>
     </div>
