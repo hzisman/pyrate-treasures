@@ -9,5 +9,4 @@ export default defineConfig({
             'node-fetch': 'isomorphic-fetch',
         },
     },
-    base: '/pyrate-treasures/',
 })
