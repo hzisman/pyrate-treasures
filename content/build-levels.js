@@ -3,6 +3,7 @@
 import YAML from 'yaml';
 import { marked } from 'marked';
 import fs from 'fs';
+import os from 'os';
 
 const LEVEL_ORDER = [
     'single-element',
@@ -41,4 +42,10 @@ for (const [index, levelFile] of levelsFiles.entries()) {
     levels[index+1] = level;
 }
 
-fs.writeFileSync(TARGET_FILE, `export const levels = ${JSON.stringify(levels, null, 4)}`);
+const coinCount = Object.values(levels).map(level => level.selected.length).reduce((prev, cur) => prev + cur);
+
+fs.writeFileSync(TARGET_FILE, `// This code is automatically generated from ./content/build-levels.js
+export const levels = ${JSON.stringify(levels, null, 4)};
+
+export const coinCount = ${coinCount};
+`);

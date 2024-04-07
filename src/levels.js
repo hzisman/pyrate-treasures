@@ -1,3 +1,4 @@
+// This code is automatically generated from ./content/build-levels.js
 export const levels = {
     "1": {
         "title": "Single Element",
@@ -88,4 +89,6 @@ export const levels = {
         ],
         "codePrefix": "island"
     }
-}
+};
+
+export const coinCount = 26;

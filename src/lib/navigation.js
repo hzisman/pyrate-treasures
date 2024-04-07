@@ -1,4 +1,5 @@
 import { push } from 'svelte-spa-router'
+import { levelCount } from './level'
 
 export function navigateWithViewTransition(to='/') {
     console.log(to)
@@ -9,8 +10,16 @@ export function navigateWithViewTransition(to='/') {
 }
 
 export function relativeNavigation(level) {
+
+
+
     return {
-        prev: () => navigateWithViewTransition(String(+level - 1)),
-        next: () => navigateWithViewTransition(String(+level + 1)),
+        prev: () => navigateWithViewTransition(`levels/${+level - 1}`),
+        next: () => navigateWithViewTransition(`levels/${+level + 1}`),
+        nextOrEnd: () => (
+            level === levelCount
+            ? navigateWithViewTransition(`end`) 
+            : navigateWithViewTransition(`levels/${+level + 1}`)
+        ),
     }
 }

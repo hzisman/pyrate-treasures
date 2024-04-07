@@ -12,7 +12,7 @@
 
 <style>
     .compass {
-        border: 2px solid #888;
+        border: 1px solid #888;
         display: block; 
         width: 25px; 
         height: 25px;

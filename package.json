@@ -8,7 +8,7 @@
     "dev": "npm run build-content && vite",
     "build": "npm run build-content && vite build",
     "preview": "vite preview",
-    "deploy": "npx gh-pages -d dist"
+    "deploy": "npm run build && npx gh-pages -d dist"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",

@@ -60,7 +60,7 @@
         if (containSameValues(actualSelected, selected)) {
             correctSelection.set(true);
             progress.update(oldProgress => ({ ...oldProgress, [level]: code }));
-            setTimeout(relative.next, DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
+            setTimeout(relative.nextOrEnd, DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION);
             setTimeout(() => correctSelection.set(false), DELAY_BETWEEN_CORRECT_ANSWER_TO_NAVIGATION+100);
         } else {
             newWrongSelection.set(true);
